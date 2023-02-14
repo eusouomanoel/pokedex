@@ -1,11 +1,11 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Box, CardActionArea, Modal } from "@mui/material";
 import PokemonModal from "../Modal";
+import styles from "./styles.module.css";
 import {
   createTheme,
   responsiveFontSizes,
@@ -14,18 +14,6 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Pokemon } from "../../services/interface";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 export default function PokemonCard({
   name,
@@ -50,9 +38,7 @@ export default function PokemonCard({
   return (
     <Card
       sx={{
-        maxWidth: 500,
-        minHeight: 275,
-        minWidth: 250,
+        width: "100%",
         transition: "0.3s",
         ":hover": {
           transform: "scale(1.05)",
@@ -79,27 +65,45 @@ export default function PokemonCard({
             alignItems="center"
           >
             <ThemeProvider theme={theme}>
-              <Grid container spacing={2}>
-                <Grid xs={2}>
-                  <Typography gutterBottom variant="h5" component="div">
+              <Grid
+                container
+                spacing={2}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Grid
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  xs={2}
+                  sx={{
+                    backgroundColor: "rgba(255, 255, 255, 0.08)",
+                    borderRadius: 50,
+                    padding: 0.5,
+                    margin: 0,
+                  }}
+                >
+                  <Typography component="div" align="center" fontSize="0.75rem">
                     {id}
                   </Typography>
                 </Grid>
-                <Grid xs={10}>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    align="right"
-                  >
+                <Grid
+                  xs={10}
+                  display="flex"
+                  justifyContent="space-around"
+                  alignItems="center"
+                >
+                  <Typography component="div" align="right" fontSize="1rem">
                     {name.toUpperCase()}
                   </Typography>
                 </Grid>
                 <Grid xs={12}>
                   <Typography
                     gutterBottom
-                    variant="caption"
+                    // variant="caption"
                     component="div"
+                    fontSize="0.75rem"
                     align="center"
                   >
                     {typeHandler(types).toUpperCase()}

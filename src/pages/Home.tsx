@@ -56,7 +56,7 @@ export const Home = () => {
 
   const getAllPokemons = () => {
     let endpoints: string[] = [];
-    for (let i = 1; i <= 1000; i++) {
+    for (let i = 1; i <= 1008; i++) {
       endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
     }
     axios
@@ -84,7 +84,7 @@ export const Home = () => {
     } else {
       let filteredPokemons: any = [];
       for (let i in allPokemons) {
-        if (allPokemons[i].name.includes(name)) {
+        if (allPokemons[i].name.includes(name.toLowerCase())) {
           filteredPokemons.push(allPokemons[i]);
         }
       }
@@ -105,7 +105,7 @@ export const Home = () => {
             <Skeletons />
           ) : (
             pokemons.map((pokemon, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Grid item xs={12} sm={4} md={3} lg={2} xl={1} key={index}>
                 <PokemonCard
                   name={pokemon.name}
                   image={pokemon.image}
