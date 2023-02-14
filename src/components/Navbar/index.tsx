@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 
 interface Props {
   pokemonFilter: (name: string) => void;
@@ -64,15 +66,28 @@ export default function Navbar({ pokemonFilter }: Props) {
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: "inline-block", sm: "block" },
+            }}
           >
-            <Box display="flex" justifyContent="space-between">
-              POKEDEX
-              <Box
-                component="img"
-                src="/assets/pokeball.png"
-                height="2em"
-              ></Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{
+                gap: 2,
+              }}
+            >
+              <Button href="/">POKEDEX</Button>
+              <Button href="/">
+                <Box
+                  component="img"
+                  src="/assets/pokeball.png"
+                  height="2em"
+                ></Box>
+              </Button>
+
               <Search
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   pokemonFilter(e.target.value)

@@ -1,42 +1,32 @@
 import { Container, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import PokemonCard from "../components/PokemonCard";
 import { Skeletons } from "../components/Skeletons";
-import PokemonModal from "../components/Modal";
-import { textSpanEnd } from "typescript";
-
-interface Pokemon {
-  name: string;
-  sprites?: {
-    front_default: string;
-  };
-  image: string;
-  types: any;
-}
-
-interface Props {
-  name: string;
-  children?: React.ReactNode;
-  pokemonFilter: (name: string) => void;
-}
+import { Pokemon } from "../services/interface";
 
 type Pokemons = Pokemon[];
 
 export const Home = () => {
   const [pokemons, setPokemons] = useState<Pokemons>([]);
+  const [offset, setOffset] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
+  const [allPokemons, setAllPokemons] = useState<Pokemons>([]);
 
   useEffect(() => {
     getPokemons();
+    const timeout = setTimeout(() => {
+      getAllPokemons();
+    }, 500);
+
+    return () => clearTimeout(timeout);
   }, []);
 
-  const getPokemons = () => {
+  const getPokemons = (offset: number = 0) => {
     let endpoints: string[] = [];
-    for (let i = 1; i < 50; i++) {
+    for (let i = 1 + offset; i <= 25 + offset; i++) {
       endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
     }
     axios
@@ -47,23 +37,63 @@ export const Home = () => {
           name: pokemon.name,
           sprites: pokemon.sprites,
           image: pokemon.sprites.front_default,
-          types: pokemon.types, // define a propriedade image
+          types: pokemon.types,
+          id: pokemon.id,
+          hp: pokemon.stats[0].base_stat,
+          atk: pokemon.stats[1].base_stat,
+          def: pokemon.stats[2].base_stat,
         })) as Pokemons;
-        setPokemons(formattedPokemons);
+        if (offset === 0) {
+          setPokemons(formattedPokemons);
+        } else {
+          setPokemons((prevPokemons) => [
+            ...prevPokemons,
+            ...formattedPokemons,
+          ]);
+        }
       });
   };
+
+  const getAllPokemons = () => {
+    let endpoints: string[] = [];
+    for (let i = 1; i <= 1000; i++) {
+      endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
+    }
+    axios
+      .all(endpoints.map((endpoint) => axios.get(endpoint)))
+      .then((response) => {
+        const pokemons: any = response.map((res) => res.data);
+        const formattedPokemons = pokemons.map((pokemon: any) => ({
+          name: pokemon.name,
+          sprites: pokemon.sprites,
+          image: pokemon.sprites.front_default,
+          types: pokemon.types,
+          id: pokemon.id,
+          hp: pokemon.stats[0].base_stat,
+          atk: pokemon.stats[1].base_stat,
+          def: pokemon.stats[2].base_stat,
+        })) as Pokemons;
+        setAllPokemons(formattedPokemons);
+      });
+  };
+
   const pokemonFilter = (name: string) => {
-    let filteredPokemons = [];
     if (name === "") {
+      setPokemons([]);
       getPokemons();
     } else {
-      for (const i in pokemons) {
-        if (pokemons[i].name.includes(name)) {
-          filteredPokemons.push(pokemons[i]);
+      let filteredPokemons: any = [];
+      for (let i in allPokemons) {
+        if (allPokemons[i].name.includes(name)) {
+          filteredPokemons.push(allPokemons[i]);
         }
       }
+      setPokemons(filteredPokemons);
     }
-    setPokemons(filteredPokemons);
+  };
+  const handleLoadMore = () => {
+    setOffset(offset + 25);
+    getPokemons(offset + 25);
   };
 
   return (
@@ -74,17 +104,28 @@ export const Home = () => {
           {pokemons.length === 0 ? (
             <Skeletons />
           ) : (
-            pokemons.map((pokemon) => (
-              <Grid item xs={12} sm={6} md={4} lg={2} key={pokemon.name}>
+            pokemons.map((pokemon, index) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <PokemonCard
                   name={pokemon.name}
                   image={pokemon.image}
                   types={pokemon.types}
+                  id={pokemon.id}
+                  atk={pokemon.atk}
+                  def={pokemon.def}
+                  hp={pokemon.hp}
                 />
               </Grid>
             ))
           )}
         </Grid>
+        <div className="error-container">{error ? error : null}</div>
+
+        {pokemons.length === 0 ? null : (
+          <Box mt={3} textAlign="center">
+            <button onClick={handleLoadMore}>Carregar mais pokemons...</button>
+          </Box>
+        )}
       </Container>
     </div>
   );

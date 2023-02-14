@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Box, CardActionArea, Modal } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
-
-interface Pokemon {
-  name: string;
-  sprites?: {
-    front_default: string;
-  };
-  image: string;
-  types: any;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-}
+import PokemonModal from "../Modal";
+import {
+  createTheme,
+  responsiveFontSizes,
+  ThemeProvider,
+} from "@mui/material/styles";
+import Grid from "@mui/material/Unstable_Grid2";
+import LinearProgress from "@mui/material/LinearProgress";
+import { Pokemon } from "../../services/interface";
 
 const style = {
   position: "absolute" as "absolute",
@@ -28,7 +27,15 @@ const style = {
   p: 4,
 };
 
-export default function PokemonCard({ name, image, types }: Pokemon) {
+export default function PokemonCard({
+  name,
+  image,
+  types,
+  id,
+  atk,
+  def,
+  hp,
+}: Pokemon) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -38,47 +45,119 @@ export default function PokemonCard({ name, image, types }: Pokemon) {
       return types[0].type.name + " " + types[1].type.name;
     } else return types[0].type.name;
   };
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
   return (
-    <Card sx={{ maxWidth: 500, minHeight: 300 }} onClick={handleOpen}>
-      <CardActionArea>
-        <CardMedia component="img" image={image} alt={name} />
+    <Card
+      sx={{
+        maxWidth: 500,
+        minHeight: 275,
+        minWidth: 250,
+        transition: "0.3s",
+        ":hover": {
+          transform: "scale(1.05)",
+          backgroundColor: "rgba(255, 255, 255, 0.16)",
+        },
+      }}
+    >
+      <CardActionArea onClick={handleOpen}>
+        <CardMedia
+          component="img"
+          image={image}
+          alt={name}
+          sx={{
+            transition: "0.3s",
+            ":hover": {
+              transform: "scale(1.3)",
+            },
+          }}
+        />
         <CardContent>
           <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography gutterBottom variant="h5" component="div">
-              {name}
-            </Typography>
-            <Typography gutterBottom variant="caption" component="div">
-              {typeHandler(types)}
-            </Typography>
+            <ThemeProvider theme={theme}>
+              <Grid container spacing={2}>
+                <Grid xs={2}>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {id}
+                  </Typography>
+                </Grid>
+                <Grid xs={10}>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    align="right"
+                  >
+                    {name.toUpperCase()}
+                  </Typography>
+                </Grid>
+                <Grid xs={12}>
+                  <Typography
+                    gutterBottom
+                    variant="caption"
+                    component="div"
+                    align="center"
+                  >
+                    {typeHandler(types).toUpperCase()}
+                  </Typography>
+                </Grid>
+                <Grid
+                  sx={{
+                    flexGrow: 1,
+                    boxShadow: 1,
+                    backgroundColor: "rgba(255, 255, 255, 0.08)",
+                    borderRadius: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography gutterBottom variant="caption" component="div">
+                    ATK: {atk}
+                    <LinearProgress
+                      variant="determinate"
+                      value={atk}
+                      valueBuffer={150}
+                      style={{ height: 10 }}
+                      color="error"
+                    />
+                  </Typography>
+                  <Typography gutterBottom variant="caption" component="div">
+                    DEF: {def}
+                    <LinearProgress
+                      variant="determinate"
+                      value={def}
+                      valueBuffer={150}
+                      style={{ height: 10 }}
+                      color="info"
+                    />
+                  </Typography>
+                  <Typography gutterBottom variant="caption" component="div">
+                    HP: {hp}
+                    <LinearProgress
+                      variant="determinate"
+                      value={hp}
+                      valueBuffer={150}
+                      style={{ height: 10 }}
+                      color="success"
+                    />
+                  </Typography>
+                </Grid>
+              </Grid>
+            </ThemeProvider>
           </Box>
-
-          {/* <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography> */}
         </CardContent>
       </CardActionArea>
-
-      <Modal
+      <PokemonModal
         open={open}
-        onClose={handleClose}
-        onBackdropClick={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={{ ...style, width: 400, backgroundColor: "white" }}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {name}
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {typeHandler(types)}
-          </Typography>
-        </Box>
-      </Modal>
+        handleClose={handleClose}
+        name={name}
+        image={image}
+        types={types}
+      />
     </Card>
   );
 }
