@@ -67,10 +67,12 @@ export default function PokemonCard({
             <ThemeProvider theme={theme}>
               <Grid
                 container
-                spacing={2}
+                spacing={1}
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
+                xs={12}
+                sx={{ padding: "0", margin: "0" }}
               >
                 <Grid
                   display="flex"
@@ -89,7 +91,7 @@ export default function PokemonCard({
                   </Typography>
                 </Grid>
                 <Grid
-                  xs={10}
+                  xs={9}
                   display="flex"
                   justifyContent="space-around"
                   alignItems="center"
@@ -98,7 +100,7 @@ export default function PokemonCard({
                     {name.toUpperCase()}
                   </Typography>
                 </Grid>
-                <Grid xs={12}>
+                <Grid xs={12} sm={12} xl={12}>
                   <Typography
                     gutterBottom
                     // variant="caption"
@@ -110,6 +112,9 @@ export default function PokemonCard({
                   </Typography>
                 </Grid>
                 <Grid
+                  xs={12}
+                  sm={12}
+                  xl={12}
                   sx={{
                     flexGrow: 1,
                     boxShadow: 1,
