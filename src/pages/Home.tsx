@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Dashboard } from "../components/Dashboard";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import PokemonCard from "../components/PokemonCard";
@@ -61,6 +62,9 @@ export const Home = () => {
     for (let i = 1; i <= 1008; i++) {
       endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
     }
+    for (let i = 10001; i <= 10271; i++) {
+      endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
+    }
     axios
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then((response) => {
@@ -102,27 +106,25 @@ export const Home = () => {
     <div>
       <Navbar pokemonFilter={pokemonFilter}></Navbar>
       <Container maxWidth="xl">
+        <Dashboard allPokemons={allPokemons}></Dashboard>
         <Grid container spacing={2}>
-          {pokemons.length === 0 ? (
-            <Skeletons />
-          ) : (
-            pokemons.map((pokemon, index) => (
-              <Grid item xs={12} sm={4} md={3} lg={2} xl={1} key={index}>
-                <PokemonCard
-                  name={pokemon.name}
-                  image={pokemon.image}
-                  types={pokemon.types}
-                  id={pokemon.id}
-                  atk={pokemon.atk}
-                  def={pokemon.def}
-                  hp={pokemon.hp}
-                />
-              </Grid>
-            ))
-          )}
+          {pokemons.length === 0
+            ? null
+            : pokemons.map((pokemon, index) => (
+                <Grid item xs={6} sm={4} md={3} lg={2} xl={2} key={index}>
+                  <PokemonCard
+                    name={pokemon.name}
+                    image={pokemon.image}
+                    types={pokemon.types}
+                    id={pokemon.id}
+                    atk={pokemon.atk}
+                    def={pokemon.def}
+                    hp={pokemon.hp}
+                  />
+                </Grid>
+              ))}
         </Grid>
         <div className="error-container">{error ? error : null}</div>
-
         {pokemons.length === 0 ? null : (
           <Box mt={3} textAlign="center">
             <Button onClick={handleLoadMore} variant="outlined">

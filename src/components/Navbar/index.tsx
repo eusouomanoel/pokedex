@@ -59,7 +59,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Navbar({ pokemonFilter }: Props) {
   return (
-    <Box sx={{ flexGrow: 1, marginBottom: "2em" }}>
+    <Box sx={{ flexGrow: 1, marginBottom: "0.75rem" }}>
       <AppBar position="fixed" sx={{ bgcolor: "black" }}>
         <Toolbar>
           <Typography
