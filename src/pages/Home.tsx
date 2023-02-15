@@ -1,7 +1,9 @@
 import { Container, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import PokemonCard from "../components/PokemonCard";
 import { Skeletons } from "../components/Skeletons";
@@ -32,7 +34,7 @@ export const Home = () => {
     axios
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then((response) => {
-        const pokemons: any = response.map((res) => res.data);
+        const pokemons: string[] = response.map((res) => res.data);
         const formattedPokemons = pokemons.map((pokemon: any) => ({
           name: pokemon.name,
           sprites: pokemon.sprites,
@@ -62,7 +64,7 @@ export const Home = () => {
     axios
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then((response) => {
-        const pokemons: any = response.map((res) => res.data);
+        const pokemons: string[] = response.map((res) => res.data);
         const formattedPokemons = pokemons.map((pokemon: any) => ({
           name: pokemon.name,
           sprites: pokemon.sprites,
@@ -82,7 +84,7 @@ export const Home = () => {
       setPokemons([]);
       getPokemons();
     } else {
-      let filteredPokemons: any = [];
+      let filteredPokemons: Pokemon[] = [];
       for (let i in allPokemons) {
         if (allPokemons[i].name.includes(name.toLowerCase())) {
           filteredPokemons.push(allPokemons[i]);
@@ -123,10 +125,13 @@ export const Home = () => {
 
         {pokemons.length === 0 ? null : (
           <Box mt={3} textAlign="center">
-            <button onClick={handleLoadMore}>Carregar mais pokemons...</button>
+            <Button onClick={handleLoadMore} variant="outlined">
+              Carregar mais pokemons...
+            </Button>
           </Box>
         )}
       </Container>
+      <Footer></Footer>
     </div>
   );
 };

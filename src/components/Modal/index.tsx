@@ -63,8 +63,10 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "500px",
-  height: "auto",
+  width: "65%",
+  maxWidth: "500px",
+  maxHeight: "730px",
+  height: "85%",
   border: "2px solid #000",
   boxShadow: 24,
   p: 2,
@@ -78,7 +80,11 @@ export default function PokemonModal({
   handleClose,
 }: PokemonModalProps) {
   const typeHandler = (types: any) => {
-    if (types[1]) {
+    if (types[2]) {
+      return (
+        types[0].type.name + " " + types[1].type.name + " " + types[2].type.name
+      );
+    } else if (types[1]) {
       return types[0].type.name + " " + types[1].type.name;
     } else return types[0].type.name;
   };
@@ -161,7 +167,7 @@ export default function PokemonModal({
             ...style,
             flexGrow: 1,
             backgroundColor: "#121212",
-            borderRadius: "12px",
+            borderRadius: "0.5rem",
             borderColor: "#fff",
             boxShadow: "0 0 10px 2px rgba(0, 0, 0, 0.2)",
             textAlign: "center",
@@ -170,26 +176,21 @@ export default function PokemonModal({
         >
           <Grid container spacing={1}>
             <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
+              item
               xs={1}
               sx={{
                 boxShadow: 15,
                 backgroundColor: "rgba(255, 255, 255, 0.08)",
                 borderRadius: 50,
               }}
+              alignItems="center"
+              justifyContent="center"
             >
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                margin="0"
-              >
+              <Typography textAlign="center" id="modal-modal-title">
                 {pokemonInfo?.id}
               </Typography>
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={10} justifyContent="center" alignItems="center">
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 {name.toUpperCase()}
               </Typography>
@@ -200,26 +201,36 @@ export default function PokemonModal({
               direction="row"
               justifyContent="space-between"
               alignItems="stretch"
+              gap={2}
+              flexWrap="wrap"
             >
-              <Grid item>
+              <Grid item xs={12} sm={4} xl={4}>
                 <Box
                   className="animate__shakeX"
                   component="img"
                   sx={{
                     animationDuration: "5s",
-                    height: 233,
+                    height: "100%",
                     maxHeight: { xs: 233, md: 167 },
                   }}
                   src={image}
                   alt={name}
                 ></Box>
               </Grid>
-              <Grid item xs={3}>
+              <Grid
+                item
+                xs={12}
+                sm={3}
+                xl={3}
+                justifyContent="space-between"
+                alignItems="stretch"
+              >
                 <Box
                   sx={{
                     boxShadow: 15,
                     backgroundColor: "rgba(255, 255, 255, 0.08)",
                     borderRadius: 5,
+                    marginBottom: 2,
                   }}
                 >
                   <Typography
@@ -229,7 +240,7 @@ export default function PokemonModal({
                   >
                     TYPE: <br />
                   </Typography>
-                  <Typography fontSize="15px">
+                  <Typography fontSize="0.7rem">
                     {typeHandler(types).toUpperCase()}
                   </Typography>
                 </Box>
@@ -239,7 +250,9 @@ export default function PokemonModal({
                     backgroundColor: "rgba(255, 255, 255, 0.08)",
                     borderRadius: 5,
                     height: "45%",
-                    paddingTop: "15",
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "column",
                   }}
                 >
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -252,13 +265,14 @@ export default function PokemonModal({
               </Grid>
               <Grid
                 item
-                xs={4}
+                xs={12}
+                sm={3}
+                xl={3}
                 sx={{
                   boxShadow: 15,
                   backgroundColor: "rgba(255, 255, 255, 0.08)",
                   borderRadius: 5,
                   paddingRight: 2,
-                  paddingBottom: 1,
                 }}
               >
                 <Typography
@@ -278,7 +292,7 @@ export default function PokemonModal({
                       }}
                     >
                       <ListItemText
-                        primaryTypographyProps={{ fontSize: "12px" }}
+                        primaryTypographyProps={{ fontSize: "0.75rem" }}
                         primary={move.move.name.toUpperCase()}
                       />
                     </ListItem>
@@ -291,7 +305,7 @@ export default function PokemonModal({
                 item
                 xs={12}
                 sx={{
-                  flexGrow: 1,
+                  height: "92%",
                   boxShadow: 15,
                   backgroundColor: "rgba(255, 255, 255, 0.08)",
                   borderRadius: 7,
@@ -302,6 +316,7 @@ export default function PokemonModal({
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   STATS <br />
                 </Typography>
+
                 <Radar
                   data={getChartData()}
                   options={{
