@@ -3,9 +3,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Box, CardActionArea, Modal } from "@mui/material";
+import { Box, CardActionArea } from "@mui/material";
 import PokemonModal from "../Modal";
-import styles from "./styles.module.css";
 import {
   createTheme,
   responsiveFontSizes,
