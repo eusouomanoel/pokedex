@@ -1,13 +1,12 @@
 import { Container, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Dashboard } from "../components/Dashboard";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import PokemonCard from "../components/PokemonCard";
-import { Skeletons } from "../components/Skeletons";
+import { getAllPokemons, getPokemons } from "../services/api";
 import { Pokemon } from "../services/interface";
 
 type Pokemons = Pokemon[];
@@ -19,74 +18,29 @@ export const Home = () => {
   const [allPokemons, setAllPokemons] = useState<Pokemons>([]);
 
   useEffect(() => {
-    getPokemons();
+    getPokemons(offset)
+      .then((data: any) => {
+        if (offset === 0) {
+          setPokemons(data);
+        } else {
+          setPokemons((prevPokemons) => [...prevPokemons, ...data]);
+        }
+      })
+      .catch((error) => {
+        alert("Não foi possivel carregar os pokemons.");
+      });
     const timeout = setTimeout(() => {
-      getAllPokemons();
+      getAllPokemons().then((data: any) => {
+        setAllPokemons(data);
+      });
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [offset]);
 
-  const getPokemons = (offset: number = 0) => {
-    let endpoints: string[] = [];
-    for (let i = 1 + offset; i <= 25 + offset; i++) {
-      endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
-    }
-    axios
-      .all(endpoints.map((endpoint) => axios.get(endpoint)))
-      .then((response) => {
-        const pokemons: string[] = response.map((res) => res.data);
-        const formattedPokemons = pokemons.map((pokemon: any) => ({
-          name: pokemon.name,
-          sprites: pokemon.sprites,
-          image: pokemon.sprites.front_default,
-          types: pokemon.types,
-          id: pokemon.id,
-          hp: pokemon.stats[0].base_stat,
-          atk: pokemon.stats[1].base_stat,
-          def: pokemon.stats[2].base_stat,
-        })) as Pokemons;
-        if (offset === 0) {
-          setPokemons(formattedPokemons);
-        } else {
-          setPokemons((prevPokemons) => [
-            ...prevPokemons,
-            ...formattedPokemons,
-          ]);
-        }
-      });
-  };
-
-  const getAllPokemons = () => {
-    let endpoints: string[] = [];
-    for (let i = 1; i <= 1008; i++) {
-      endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
-    }
-    for (let i = 10001; i <= 10271; i++) {
-      endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
-    }
-    axios
-      .all(endpoints.map((endpoint) => axios.get(endpoint)))
-      .then((response) => {
-        const pokemons: string[] = response.map((res) => res.data);
-        const formattedPokemons = pokemons.map((pokemon: any) => ({
-          name: pokemon.name,
-          sprites: pokemon.sprites,
-          image: pokemon.sprites.front_default,
-          types: pokemon.types,
-          id: pokemon.id,
-          hp: pokemon.stats[0].base_stat,
-          atk: pokemon.stats[1].base_stat,
-          def: pokemon.stats[2].base_stat,
-        })) as Pokemons;
-        setAllPokemons(formattedPokemons);
-      });
-  };
-
-  const pokemonFilter = (name: string) => {
-    if (name === "") {
-      setPokemons([]);
-      getPokemons();
+  const pokemonFilter = (name: string | undefined | null) => {
+    if (name === "" || !name || name.length < 3) {
+      getPokemons(0).then((data) => setPokemons(data));
     } else {
       let filteredPokemons: Pokemon[] = [];
       for (let i in allPokemons) {

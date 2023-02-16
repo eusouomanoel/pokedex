@@ -15,6 +15,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { getTypesPokemons } from "../../services/api";
 
 interface Props {
   allPokemons: Pokemon[];
@@ -38,28 +39,10 @@ export const Dashboard = ({ allPokemons }: Props) => {
   const [types, setTypes] = useState<any>([]);
 
   useEffect(() => {
-    getTypesPokemons();
+    getTypesPokemons().then((data) => {
+      setTypes(data);
+    });
   }, []);
-
-  const getTypesPokemons = () => {
-    let endpoints: string[] = [];
-    for (let i = 1; i < 19; i++) {
-      endpoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
-    }
-    for (let i = 10001; i <= 10002; i++) {
-      endpoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
-    }
-    axios
-      .all(endpoints.map((endpoint) => axios.get(endpoint)))
-      .then((response) => {
-        const types: string[] = response.map((res) => res.data);
-        const formattedTypes: any = types.map((type: any) => ({
-          typeName: type.name,
-          quantidade: Number(type.pokemon.length),
-        })) as unknown;
-        setTypes(formattedTypes);
-      });
-  };
 
   function calculateAverageAttack(allPokemons: Pokemon[]): number {
     const totalAttack = Number(

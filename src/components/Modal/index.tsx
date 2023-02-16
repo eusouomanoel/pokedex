@@ -255,7 +255,16 @@ export default function PokemonModal({
                     flexDirection: "column",
                   }}
                 >
-                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  <Typography
+                    id="modal-modal-description"
+                    sx={{
+                      mt: 2,
+                      "@media (max-width: 605px)": {
+                        marginTop: "0",
+                        // paddingTop: "-10px",
+                      },
+                    }}
+                  >
                     Height: {pokemonInfo?.height}
                   </Typography>
                   <Typography id="modal-modal-description">
@@ -311,6 +320,12 @@ export default function PokemonModal({
                   borderRadius: 7,
                   alignItems: "center",
                   justifyContent: "center",
+                  "@media (max-width: 715px)": {
+                    height: "100%",
+                  },
+                  "@media (max-width: 605px)": {
+                    height: "85%",
+                  },
                 }}
               >
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
