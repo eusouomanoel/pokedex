@@ -9,6 +9,9 @@ Os usuários devem poder visualizar informações básicas sobre cada Pokémon.
 - Uma página para pesquisar os Pokémons com uma barra de pesquisa no topo;
 - Um card com os dados do Pokémon.
 
+#Resultado
+https://63ee7c752b0627005431cde0--manoelpokemonreact.netlify.app/
+
 # DESENVOLVIMENTO
 
 ## Tecnologias utilizadas
