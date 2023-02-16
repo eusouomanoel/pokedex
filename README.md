@@ -40,6 +40,7 @@ Além disso, aprendi a implementar diversos recursos, como busca e paginação, 
 ## Recursos
 
 https://mui.com/
+
 https://pokeapi.co/docs/v2
 
 # Desenvolvedor
