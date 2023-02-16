@@ -1,46 +1,48 @@
-# Getting Started with Create React App
+# OVERVIEW
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Projeto React Pokedex
 
-## Available Scripts
+Um aplicativo da Web que permita aos usuários visualizar e pesquisar Pokémon usando o PokeAPI.
+Os usuários devem poder visualizar informações básicas sobre cada Pokémon.
 
-In the project directory, you can run:
+- Uma visualização de gráficos com os dados dos nossos Pokémons;
+- Uma página para pesquisar os Pokémons com uma barra de pesquisa no topo;
+- Um card com os dados do Pokémon.
 
-### `npm start`
+# DESENVOLVIMENTO
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Tecnologias utilizadas
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+React
+Material UI
+PokeAPI
+react-chartjs-2
 
-### `npm test`
+# Funcionamento
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A aplicação consome uma API de pokemons, que é utilizada para exibir uma lista inicial de pokemons. É possível buscar pokemons por nome e ao clicar em um pokemon específico é redirecionado para uma página com detalhes sobre o pokemon selecionado.
 
-### `npm run build`
+# Como rodar o projeto
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Para rodar o projeto em sua máquina, é necessário ter o Node.js instalado. Após a instalação, siga os passos abaixo:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1 - Clone o repositório na sua máquina
+2 - Acesse a pasta do projeto pelo terminal e rode o comando `npm install`
+3 - Após finalizar a instalação das dependências, rode o comando `npm start`
+4 - A aplicação deverá abrir no endereço http://localhost:3000/
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# O que foi aprendido
 
-### `npm run eject`
+Enquanto trabalhava neste projeto, aprendi a usar o Material UI para criar uma interface responsiva e visualmente atraente.
+Também aprendi a interagir com o PokeAPI para buscar dados de cada Pokémon e exibi-los de maneira amigável.
+Além disso, aprendi a implementar diversos recursos, como busca e paginação, para aprimorar a experiência do usuário.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Recursos
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+https://mui.com/
+https://pokeapi.co/docs/v2
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# Desenvolvedor
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Nome: Manoel Neto
+E-mail: manoeln@outlook.com

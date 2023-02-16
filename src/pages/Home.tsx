@@ -33,7 +33,7 @@ export const Home = () => {
       getAllPokemons().then((data: any) => {
         setAllPokemons(data);
       });
-    }, 500);
+    }, 400);
 
     return () => clearTimeout(timeout);
   }, [offset]);
@@ -53,7 +53,7 @@ export const Home = () => {
   };
   const handleLoadMore = () => {
     setOffset(offset + 25);
-    getPokemons(offset + 25);
+    // getPokemons(offset + 25);
   };
 
   return (

@@ -29,3 +29,18 @@ export interface PokemonModalProps {
   image: string;
   types: PokemonType[];
 }
+
+export interface PokemonInfo extends PokemonModalProps {
+  weight: number;
+  height: number;
+  id: number;
+  moves: {
+    move: { name: string };
+  }[];
+  atk: number;
+  def: number;
+  hp: number;
+  specialAtk: number;
+  specialDef: number;
+  speed: number;
+}

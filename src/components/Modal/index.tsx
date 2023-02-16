@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Box,
   List,
@@ -12,8 +11,7 @@ import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { PokemonModalProps } from "../../services/interface";
-import { padding } from "@mui/system";
+import { PokemonInfo, PokemonModalProps } from "../../services/interface";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import "animate.css";
 import { Radar } from "react-chartjs-2";
@@ -43,21 +41,6 @@ const darkTheme = createTheme({
   },
 });
 
-interface PokemonInfo extends PokemonModalProps {
-  weight: number;
-  height: number;
-  id: number;
-  moves: {
-    move: { name: string };
-  }[];
-  atk: number;
-  def: number;
-  hp: number;
-  specialAtk: number;
-  specialDef: number;
-  speed: number;
-}
-
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -79,17 +62,8 @@ export default function PokemonModal({
   open,
   handleClose,
 }: PokemonModalProps) {
-  const typeHandler = (types: any) => {
-    if (types[2]) {
-      return (
-        types[0].type.name + " " + types[1].type.name + " " + types[2].type.name
-      );
-    } else if (types[1]) {
-      return types[0].type.name + " " + types[1].type.name;
-    } else return types[0].type.name;
-  };
-
   const [pokemonInfo, setPokemonInfo] = useState<PokemonInfo | null>(null);
+
   useEffect(() => {
     const fetchPokemon = async () => {
       const response = await axios.get(
@@ -114,8 +88,21 @@ export default function PokemonModal({
         speed: data.stats[5].base_stat,
       });
     };
+
     fetchPokemon();
   }, [name]);
+
+  const typeHandler = (types: any) => {
+    const typeSize: number = types.lenght;
+    if (typeSize === 2) {
+      return (
+        types[0].type.name + " " + types[1].type.name + " " + types[2].type.name
+      );
+    } else if (typeSize === 1) {
+      return types[0].type.name + " " + types[1].type.name;
+    } else return types[0].type.name;
+  };
+
   const getChartData = () => {
     const data = {
       labels: [
@@ -261,7 +248,6 @@ export default function PokemonModal({
                       mt: 2,
                       "@media (max-width: 605px)": {
                         marginTop: "0",
-                        // paddingTop: "-10px",
                       },
                     }}
                   >

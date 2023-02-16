@@ -5,9 +5,10 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import GitHubIcon from "@mui/icons-material/GitHub";
+
 export default function Footer() {
   return (
-    <Paper square>
+    <Paper square sx={{ backgroundColor: "#333" }}>
       <Container maxWidth="lg" sx={{ height: 40, alignItems: "center" }}>
         <Box
           sx={{
@@ -18,7 +19,7 @@ export default function Footer() {
             m: 2,
           }}
         >
-          <Typography variant="caption" color="white">
+          <Typography variant="caption" sx={{ color: "white" }}>
             Copyright ©2023. Manoel Neto Rodrigues Leite
           </Typography>
           <IconButton

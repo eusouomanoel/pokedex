@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import { Pokemon } from "../../services/interface";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
-import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,39 +38,30 @@ export const Dashboard = ({ allPokemons }: Props) => {
   const [types, setTypes] = useState<any>([]);
 
   useEffect(() => {
-    getTypesPokemons().then((data) => {
-      setTypes(data);
-    });
+    const timeout = setTimeout(() => {
+      getTypesPokemons().then((data) => {
+        setTypes(data);
+      });
+    }, 400);
+
+    return () => clearTimeout(timeout);
   }, []);
 
-  function calculateAverageAttack(allPokemons: Pokemon[]): number {
-    const totalAttack = Number(
-      allPokemons.reduce((acc, pokemon) => {
-        return acc + pokemon.atk;
-      }, 0)
-    );
-    return totalAttack / allPokemons.length;
-  }
-  function calculateAverageDefense(allPokemons: Pokemon[]): number {
-    const totalDefense = allPokemons.reduce((acc, pokemon) => {
-      return acc + pokemon.def;
+  function calculateAverage(allPokemons: Pokemon[], property: keyof Pokemon) {
+    const total = allPokemons.reduce((acc, pokemon) => {
+      return acc + Number(pokemon[property]);
     }, 0);
-    return totalDefense / allPokemons.length;
-  }
-  function calculateAverageSpeed(allPokemons: Pokemon[]): number {
-    const totalSpeed = allPokemons.reduce((acc, pokemon) => {
-      return acc + pokemon.hp;
-    }, 0);
-    return totalSpeed / allPokemons.length;
+    return total / allPokemons.length;
   }
 
-  const averageAttack = calculateAverageAttack(allPokemons);
-  const averageDefense = calculateAverageDefense(allPokemons);
-  const averageSpeed = calculateAverageSpeed(allPokemons);
+  const averageAttack = calculateAverage(allPokemons, "atk");
+  const averageDefense = calculateAverage(allPokemons, "def");
+  const averageSpeed = calculateAverage(allPokemons, "hp");
 
   if (!allPokemons && isLoading) {
     return <p>Loading...</p>;
   }
+
   const data = {
     labels: types.map((type: any) => {
       return type["typeName"].toUpperCase();
@@ -120,133 +110,125 @@ export const Dashboard = ({ allPokemons }: Props) => {
       },
     ],
   };
+
+  const containerDashboard = {
+    height: "240px",
+    "@media (max-width: 605px)": {
+      height: "400px",
+    },
+    width: "100%",
+    alignItems: "center",
+    marginBottom: "0.75rem",
+    backgroundColor: "rgba(255, 255, 255, 0.08)",
+    borderRadius: 10,
+    paddingBottom: 0,
+  };
+  const statsGridStyles = {
+    width: "33%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  };
+
   return (
-    <>
-      <Container
-        sx={{
-          height: "240px",
-          "@media (max-width: 605px)": {
-            height: "400px",
-          },
-          width: "100%",
-          alignItems: "center",
-          marginBottom: "0.75rem",
-          backgroundColor: "rgba(255, 255, 255, 0.08)",
-          borderRadius: 10,
-          paddingBottom: 0,
-        }}
+    <Container sx={containerDashboard}>
+      <Typography
+        variant="h5"
+        textAlign="center"
+        fontWeight="bold"
+        paddingTop="0.5rem"
+        boxShadow="5px"
       >
-        <Typography
-          variant="h5"
-          textAlign="center"
-          fontWeight="bold"
-          paddingTop="0.5rem"
-          boxShadow="5px"
-        >
-          DASHBOARD
-        </Typography>
-        <Grid container spacing={1} sx={{ height: "75%" }}>
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            xl={6}
-            sx={{
-              width: "33%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="subtitle1" gutterBottom>
-              Total de Pokemons: {allPokemons.length}
-            </Typography>
-            <Grid>
-              <Typography gutterBottom variant="caption" component="div">
-                Média ataque: {averageAttack.toFixed(2)}
-                <LinearProgress
-                  variant="determinate"
-                  value={Number(averageAttack.toFixed(2))}
-                  valueBuffer={150}
-                  style={{ height: 10 }}
-                  color="error"
-                />
-              </Typography>
-              <Typography gutterBottom variant="caption" component="div">
-                Média defesa: {averageDefense.toFixed(2)}
-                <LinearProgress
-                  variant="determinate"
-                  value={Number(averageDefense.toFixed(2))}
-                  valueBuffer={150}
-                  style={{ height: 10 }}
-                  color="info"
-                />
-              </Typography>
-              <Typography gutterBottom variant="caption" component="div">
-                Média velocidade: {averageSpeed.toFixed(2)}
-                <LinearProgress
-                  variant="determinate"
-                  value={Number(averageSpeed.toFixed(2))}
-                  valueBuffer={150}
-                  style={{ height: 10 }}
-                  color="success"
-                />
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            container
-            xs={12}
-            sm={6}
-            xl={6}
-            alignItems="center"
-            sx={{
-              width: "65%",
-              display: "flex",
-              flexDirection: "column",
-              //   justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="subtitle1">
-              Quantidade de Pokemons por tipo:
-            </Typography>
-            <Container
-              disableGutters
-              sx={{
-                // width: "100%",
-                height: "125px",
-                padding: "0px",
-                margin: "0px",
-              }}
-            >
-              <Bar
-                data={data}
-                width={"100%"}
-                height={"100%"}
-                options={{
-                  scales: { x: { ticks: { font: { size: 7 } } } },
-                  plugins: {
-                    legend: {
-                      display: false,
-                    },
-                    datalabels: {
-                      anchor: "end",
-                      align: "end",
-                      labels: {
-                        data: { font: { size: 6 } },
-                        title: { font: { size: 6 } },
-                      },
-                    },
-                  },
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
+        DASHBOARD
+      </Typography>
+      <Grid container spacing={1} sx={{ height: "75%" }}>
+        <Grid item xs={12} sm={6} xl={6} sx={statsGridStyles}>
+          <Typography variant="subtitle1" gutterBottom>
+            Total de Pokemons: {allPokemons.length}
+          </Typography>
+          <Grid>
+            <Typography gutterBottom variant="caption" component="div">
+              Média ataque: {averageAttack.toFixed(2)}
+              <LinearProgress
+                variant="determinate"
+                value={Number(averageAttack.toFixed(2))}
+                valueBuffer={150}
+                style={{ height: 10 }}
+                color="error"
               />
-            </Container>
+            </Typography>
+            <Typography gutterBottom variant="caption" component="div">
+              Média defesa: {averageDefense.toFixed(2)}
+              <LinearProgress
+                variant="determinate"
+                value={Number(averageDefense.toFixed(2))}
+                valueBuffer={150}
+                style={{ height: 10 }}
+                color="info"
+              />
+            </Typography>
+            <Typography gutterBottom variant="caption" component="div">
+              Média velocidade: {averageSpeed.toFixed(2)}
+              <LinearProgress
+                variant="determinate"
+                value={Number(averageSpeed.toFixed(2))}
+                valueBuffer={150}
+                style={{ height: 10 }}
+                color="success"
+              />
+            </Typography>
           </Grid>
         </Grid>
-      </Container>
-    </>
+        <Grid
+          item
+          container
+          xs={12}
+          sm={6}
+          xl={6}
+          alignItems="center"
+          sx={{
+            width: "65%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography variant="subtitle1">
+            Quantidade de Pokemons por tipo:
+          </Typography>
+          <Container
+            disableGutters
+            sx={{
+              height: "125px",
+              padding: "0px",
+              margin: "0px",
+            }}
+          >
+            <Bar
+              data={data}
+              width={"100%"}
+              height={"100%"}
+              options={{
+                scales: { x: { ticks: { font: { size: 7 } } } },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                  datalabels: {
+                    anchor: "end",
+                    align: "end",
+                    labels: {
+                      data: { font: { size: 6 } },
+                      title: { font: { size: 6 } },
+                    },
+                  },
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+              }}
+            />
+          </Container>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
