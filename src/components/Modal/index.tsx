@@ -306,11 +306,17 @@ export default function PokemonModal({
                   borderRadius: 7,
                   alignItems: "center",
                   justifyContent: "center",
+                  "@media (max-width: 1366px)": {
+                    height: "90%",
+                  },
                   "@media (max-width: 715px)": {
                     height: "100%",
                   },
                   "@media (max-width: 605px)": {
                     height: "85%",
+                  },
+                  "@media (max-height: 740px)": {
+                    display: "none",
                   },
                 }}
               >
