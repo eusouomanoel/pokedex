@@ -27,8 +27,11 @@ A aplicação consome uma API de pokemons, que é utilizada para exibir uma list
 Para rodar o projeto em sua máquina, é necessário ter o Node.js instalado. Após a instalação, siga os passos abaixo:
 
 1 - Clone o repositório na sua máquina
+
 2 - Acesse a pasta do projeto pelo terminal e rode o comando `npm install`
+
 3 - Após finalizar a instalação das dependências, rode o comando `npm start`
+
 4 - A aplicação deverá abrir no endereço http://localhost:3000/
 
 ## O que foi aprendido
